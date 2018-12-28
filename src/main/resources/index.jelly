@@ -1,0 +1,7 @@
+<!--
+  This view is used to render the installed plugins page.
+-->
+<?jelly escape-by-default='true'?>
+<div>
+    Extends the Authorize Project Plugin to allow jobs to Run-As user credentials.
+</div>
