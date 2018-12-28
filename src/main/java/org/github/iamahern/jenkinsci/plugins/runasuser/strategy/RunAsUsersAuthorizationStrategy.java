@@ -2,7 +2,8 @@
  * The MIT License
  * 
  * Copyright (c) 2013 IKEDA Yasuyuki
- * 
+ * Copyright (c) 2018 Michael Ahern
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -45,6 +46,10 @@ import java.util.logging.Logger;
 
 /**
  * Run builds as a user who triggered the build.
+ *
+ * This file is a modified version of {@link org.jenkinsci.plugins.authorizeproject.strategy.TriggeringUsersAuthorizationStrategy}.
+ *
+ * The original file's copyright was left as is.
  */
 public class RunAsUsersAuthorizationStrategy extends AuthorizeProjectStrategy {
     /**
