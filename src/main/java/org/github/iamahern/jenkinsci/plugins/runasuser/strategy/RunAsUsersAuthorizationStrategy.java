@@ -133,16 +133,14 @@ public class RunAsUsersAuthorizationStrategy extends AuthorizeProjectStrategy {
     /**
      * @return whether not to restrict job configuration
      * @see #getRootUserIdCause(Queue.Item)
-     * @since 1.3.1
      */
     public boolean isBreakCredentialPluginRunAsSandbox() {
         return breakCredentialPluginRunAsSandbox;
     }
 
     /**
-     * @param breakCredentialPluginRunAsSandbox whether not allow the
+     * @param breakCredentialPluginRunAsSandbox whether not allow the credentials plugin sandbox to be broken for a run-as user.
      * @see #getRootUserIdCause(Queue.Item)
-     * @since 1.3.1
      */
     @DataBoundSetter
     public void setBreakCredentialPluginRunAsSandbox(boolean breakCredentialPluginRunAsSandbox) {
