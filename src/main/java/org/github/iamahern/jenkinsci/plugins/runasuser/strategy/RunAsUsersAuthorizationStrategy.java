@@ -29,9 +29,9 @@ import hudson.Extension;
 import hudson.model.*;
 import hudson.model.Cause.UpstreamCause;
 import hudson.model.Cause.UserIdCause;
+import hudson.security.ACL;
 import hudson.security.AccessControlled;
 import hudson.util.FormValidation;
-import jenkins.model.Jenkins;
 import org.acegisecurity.Authentication;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.jenkinsci.plugins.authorizeproject.AuthorizeProjectStrategy;
@@ -69,19 +69,25 @@ public class RunAsUsersAuthorizationStrategy extends AuthorizeProjectStrategy {
      */
     @Override
     public Authentication authenticate(Job<?, ?> project, Queue.Item item) {
-        Cause.UserIdCause cause = getRootUserIdCause(item);
+        final Cause.UserIdCause cause = getRootUserIdCause(item);
+
         if (cause != null) {
-            User u = User.get(cause.getUserId(), false, Collections.emptyMap());
-            if (u == null) {
-                return Jenkins.ANONYMOUS;
-            }
-            try {
-                return u.impersonate();
-            } catch (UsernameNotFoundException e) {
-                LOGGER.log(Level.WARNING, String.format("Invalid User %s. Falls back to anonymous.", cause.getUserId()), e);
-                return Jenkins.ANONYMOUS;
+            if (ACL.SYSTEM_USERNAME.equals(cause.getUserId())) {
+                LOGGER.log(Level.FINE, "SYSTEM user found. This may occur during a remote trigger. Falling back to system default.");
+            } else{
+                final User u = User.get(cause.getUserId(), false, Collections.emptyMap());
+                if (u != null) {
+                    try {
+                        return u.impersonate();
+                    } catch (UsernameNotFoundException e) {
+                        LOGGER.log(Level.WARNING, String.format("Invalid User %s. Fallback to default behavior.", cause.getUserId()), e);
+                    }
+                } else {
+                    LOGGER.log(Level.FINE, "No user found. This may occur during a remote trigger. Falling back to system default.");
+                }
             }
         }
+
         return null;
     }
     

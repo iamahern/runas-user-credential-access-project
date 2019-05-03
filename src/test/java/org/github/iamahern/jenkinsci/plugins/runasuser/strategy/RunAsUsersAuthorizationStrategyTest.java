@@ -90,7 +90,7 @@ public class RunAsUsersAuthorizationStrategyTest {
         
         p.addProperty(new AuthorizeProjectProperty(new RunAsUsersAuthorizationStrategy()));
         
-        // if configured, run in ANONYMOUS privilege.
+        // if configured, run in SYSTEM privilege.
         {
             assertNull(p.getLastBuild());
             WebClient wc = j.createWebClient();
@@ -100,7 +100,7 @@ public class RunAsUsersAuthorizationStrategyTest {
             assertNotNull(b);
             j.assertBuildStatusSuccess(b);
             
-            assertEquals(Jenkins.ANONYMOUS, checker.authentication);
+            assertEquals(ACL.SYSTEM, checker.authentication);
             b.delete();
         }
         
@@ -194,7 +194,7 @@ public class RunAsUsersAuthorizationStrategyTest {
         } finally {
             SecurityContextHolder.setContext(orig);
         }
-        assertEquals(Jenkins.ANONYMOUS, checker.authentication);
+        assertEquals(ACL.SYSTEM, checker.authentication);
     }
     
 }
